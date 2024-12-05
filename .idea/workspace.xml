@@ -4,21 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8198d6d4-4dcd-4f58-83cb-a2c691ed66b6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/UsersDB.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/drps/Constants.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/drps/DrpsClient.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/drps/DrpsMessage.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/drps/DrpsServer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/drps/Functions.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/drps/Main.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/drps/RpsChoice.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/drps/ServerClientComms.java" afterDir="false" />
+    <list default="true" id="8198d6d4-4dcd-4f58-83cb-a2c691ed66b6" name="Changes" comment="Initial commit&#10;Baseline project works - client plays against server - nonrandom/rigged">
+      <change afterPath="$PROJECT_DIR$/LICENSE" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/readme.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,6 +16,9 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
   </component>
   <component name="MavenImportPreferences">
     <option name="generalSettings">
@@ -49,6 +41,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "/Users/ams/Desktop/CodingWorks/Java/DistributedRPS/DRPS",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -58,6 +51,11 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+    </key>
+  </component>
   <component name="RunManager" selected="Maven.DRPS-Maven-Build">
     <configuration name="DRPS-Run" type="Application" factoryName="Application">
       <classpathModifications>
@@ -108,8 +106,17 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1732120820535</updated>
-      <workItem from="1732120821862" duration="73757000" />
+      <workItem from="1732120821862" duration="76212000" />
     </task>
+    <task id="LOCAL-00001" summary="Initial commit&#10;Baseline project works - client plays against server - nonrandom/rigged">
+      <option name="closed" value="true" />
+      <created>1733238563887</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1733238563887</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -125,5 +132,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Initial commit&#10;Baseline project works - client plays against server - nonrandom/rigged" />
+    <option name="LAST_COMMIT_MESSAGE" value="Initial commit&#10;Baseline project works - client plays against server - nonrandom/rigged" />
   </component>
 </project>
