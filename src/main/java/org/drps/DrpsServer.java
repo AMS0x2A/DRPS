@@ -73,38 +73,33 @@ class Worker extends Thread {
     Worker(Socket s) {
         sock = s;
         try {
-            in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
-            out = new PrintStream(sock.getOutputStream());
+            reader = new ThreadedReader(new BufferedReader(new InputStreamReader(sock.getInputStream())));
+            writer = new ThreadedWriter(new PrintStream(sock.getOutputStream()));
 
             String key = s.getInetAddress().toString() + ":" + Integer.toString(s.getLocalPort());
             String username;
             if (!Database.socks.containsKey(key)) {
-                out.println(DrpsMessage.REGISTER_USERNAME.toString());
-                out.flush();
+                writer.writeLine(DrpsMessage.REGISTER_USERNAME.toString());
 
-                username = in.readLine();
+                username = reader.readLine();
                 while (Database.usernames.contains(username.toLowerCase())) {
-                    out.println(DrpsMessage.USERNAME_TAKEN.toString());
-                    out.flush();
+                    writer.writeLine(DrpsMessage.USERNAME_TAKEN.toString());
 
-                    username = in.readLine();
+                    username = reader.readLine();
                 }
                 user = new User(username);
-                out.println(DrpsMessage.USERNAME_ACCEPTED.toString());
-                out.flush();
+                writer.writeLine(DrpsMessage.USERNAME_ACCEPTED.toString());
             } else {
-                out.println(DrpsMessage.FOUND_USER.toString());
-                out.flush();
+                writer.writeLine(DrpsMessage.FOUND_USER.toString());
 
-                String fromClient = in.readLine();
+                String fromClient = reader.readLine();
                 if (!fromClient.equals(DrpsMessage.ACK.toString())) {
                     System.err.println("Client (" + key + ") sent unexpected message: " + fromClient);
                 }
 
                 user = Database.getUserByKey(key);
                 username = user.username;
-                out.println(user.username);
-                out.flush();
+                writer.writeLine(user.username);
             }
             Database.put(key, username);
             System.out.println(user.username + " connected to server");
@@ -124,18 +119,16 @@ class Worker extends Thread {
                 System.out.println(user.username + " thread running");
 
                 while (true) {
-                    String cmd = in.readLine();
+                    String cmd = reader.readLine();
                     if (cmd.equals(DrpsMessage.DISCONNECT.toString())) { break; }
                     else if (cmd.equals(DrpsMessage.GET_STATS.toString())) {
-                        printStats(user, out);
+                        printStats(user, writer);
                         continue;
                     }
-                    printResult(RpsChoice.value(cmd), user, out);
+                    printResult(RpsChoice.value(cmd), user, writer);
                 }
 
                 System.out.println(user.username + " disconnected. Thread stopping");
-            } catch (IOException x) {
-                System.err.println("Server read error");
             } catch (NullPointerException npe) {
                 System.err.println(npe);
                 System.err.println("The client has disconnected");
@@ -147,31 +140,29 @@ class Worker extends Thread {
         }
     }
 
-    static void printStats(User user, PrintStream out) {
+    static void printStats(User user, ThreadedWriter writer) {
         try {
-            out.println(user.toString());
-            out.flush();
+            writer.writeLine(user.toString());
         } catch (Exception ex) {
-            out.println("Couldn't get stats");
-            out.flush();
+            writer.writeLine("Couldn't get stats");
         }
     }
 
-    static void printResult(RpsChoice choice, User user, PrintStream out) {
+    static void printResult(RpsChoice choice, User user, ThreadedWriter writer) {
         try {
-            int result = Battle.print(choice, user, out);
+            int result = Battle.print(choice, user, writer);
             Database.inc(user.username, result);
         } catch (Exception ex) {
-            out.println("Failed in attempt to serve battle");
-            out.flush();
+            writer.writeLine("Failed in attempt to serve battle");
         }
     }
 
     Socket sock;
-    BufferedReader in = null;
-    PrintStream out = null;
     User user;
     boolean inQueue = false;
+
+    static ThreadedReader reader;
+    static ThreadedWriter writer;
 }
 
 class Battle {
@@ -182,16 +173,14 @@ class Battle {
     public static void incWins(User user) { user.wins++; }
     public static void incLoses(User user) { user.loses++; }
 
-    public static int print(RpsChoice choice, User user, PrintStream out) {
+    public static int print(RpsChoice choice, User user, ThreadedWriter writer) {
         RpsChoice otherChoice = choice == RpsChoice.PAPER ? RpsChoice.SCISSORS : RpsChoice.ROCK;
-        out.println(otherChoice.toString());
-        out.flush();
+        writer.writeLine(otherChoice.toString());
 
         int res = rps(choice, otherChoice);
-        if (res == 0) { out.println("It's a draw"); }
-        else if (res == 1) { out.println("You win"); }
-        else { out.println("You lose"); }
-        out.flush();
+        if (res == 0) { writer.writeLine("It's a draw"); }
+        else if (res == 1) { writer.writeLine("You win"); }
+        else { writer.writeLine("You lose"); }
 
         return res;
     }
