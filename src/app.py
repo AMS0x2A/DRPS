@@ -39,7 +39,7 @@ def create_app() -> Flask:
 
     @_app.route("/", methods=["GET"])
     def index():
-        print(request.host_url)
+        # print(request.host_url)
         username: str = ""
         if "username" in session.keys():
             username = session["username"]
