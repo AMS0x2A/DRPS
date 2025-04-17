@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+{% block title %}Battle{% endblock %}
+
+{% block content %}
+    {% if outcome and outcome[0] == -1 %}
+        <div class="alert alert-danger" role="alert">
+            {{ outcome[1] }}
+        </div>
+    {% elif outcome and outcome[0] == 0 %}
+        <div class="alert alert-warning" role="alert">
+            {{ outcome[1] }}
+        </div>  
+    {% elif outcome and outcome[0] == 1 %}
+        <div class="alert alert-success" role="alert">
+            {{ outcome[1] }}
+        </div>
+    {% endif %}
+
+    {% if error %}
+        <div class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+    {% endif %}
+    
+    <form method="post" action="/battling">
+        <div class="mb-3 row">
+            <label for="opponent" class="form-label">Opponent Username:</label>
+            <input type="text" name="opponent" class="form-control" placeholder="johnny_scissors" />
+        </div>
+
+        <div class="mb-3 row">
+            <label for="choice" class="form-label">Choice:</label>
+            <select name="choice" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example" required>
+                <option value="" selected>--</option>
+                <option value="rock">Rock</option>
+                <option value="paper">Paper</option>
+                <option value="scissors">Scissors</option>
+              </select>
+        </div>
+    
+        <input type="submit" value="Send Battle">
+    </form>
+{% endblock %}

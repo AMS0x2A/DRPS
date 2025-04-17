@@ -1,0 +1,54 @@
+#content {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.table {
+    width: 99vw;
+    color: #000;
+}
+
+.nav {
+    position: sticky;
+    top: 0;
+    width: 100vw;
+    overflow: hidden;
+    background-color: #333;
+    color: #000;
+    opacity: 1;
+}
+
+.jumbotron {
+  scroll-margin-top: 200px;
+}
+
+a {
+    text-decoration: none;
+}
+
+body {
+    min-height: 95vh;
+    min-width: 95vw;
+    display: flex;
+    flex-direction: column;
+    background-color: #BBB;
+    color: #FFF;
+    font-size: x-large;
+    /*text-align: center;*/
+}
+
+header {
+    margin-bottom: auto;
+}
+
+img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    /*width: 30vw;*/
+}
+
+footer {
+    margin-top: auto;
+}

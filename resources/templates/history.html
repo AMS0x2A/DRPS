@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+{% block title %}History{% endblock %}
+
+{% block content %}
+    {% if queue %}
+        <h1>Queue</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Opponent</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for game in queue %}
+                    <tr>
+                        <td>{{ game["opponent"] }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+    {% if history %}
+        <h1>History of Games</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Result</th>
+                    <th>Choice</th>
+                    <th>Opponent</th>
+                    <th>Opponent Choice</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for game in games %}
+                    <tr>
+                        <td>{{ game["result"] }}</td>
+                        <td>{{ game["choice"] }}</td>
+                        <td>{{ game["opponent"] }}</td>
+                        <td>{{ game["opp_choice"] }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+{% endblock %}

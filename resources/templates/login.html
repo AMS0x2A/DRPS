@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% block title %}Login{% endblock %}
+
+{% block content %}
+    {% if error %}
+        <div class="alert alert-danger" role="alert">
+            <p class="mb-0">{{ error }}</p>
+        </div>
+    {% endif %}
+    
+    <form method="post" action="/loggingin">
+        <div class="mb-3 row">
+            <label for="username" class="form-label">Username:</label>
+            <input type="text" name="username" class="form-control" placeholder="johnny_scissors" value="{{ username }}" required/>
+        </div>
+    
+        <div class="mb-3 row">
+            <label for="password" class="form-label">Password:</label>
+            <input type="password" name="password" class="form-control" required/>
+        </div>
+    
+        <input type="submit" value="Log In">
+    </form>
+{% endblock %}

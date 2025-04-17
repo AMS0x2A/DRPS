@@ -1,0 +1,31 @@
+from app import create_app 
+from data_instance import DataInstance
+
+
+def main(host: str="0.0.0.0", port: int=5000, debug: bool=False):
+    DataInstance().host = host
+    DataInstance().port = port
+    
+    create_app().run(host, port, debug)
+
+
+if __name__ == "__main__":
+    from argparse import ArgumentParser, Namespace
+
+    parser: ArgumentParser = ArgumentParser(
+        prog="Better Betting API and Website",
+        description="A website/api for betting predictions"
+    )
+    parser.add_argument(
+        "-d", "--debug", help="Debug flag.",
+        action="store_true"
+    )
+    parser.add_argument(
+        "-p", "--port", type=int, 
+        help="The port on which to run the webserver/api. Defaults to 5000.",
+        default=5000
+    )
+
+    args: Namespace = parser.parse_args()
+
+    main(host="0.0.0.0", port=args.port, debug=args.debug)

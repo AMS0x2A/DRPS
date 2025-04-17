@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+{% block title %}Sign Up{% endblock %}
+
+{% block content %}
+    {% if error %}
+        <div class="alert alert-danger" role="alert">
+            <p class="mb-0">{{ error }}</p>
+        </div>
+    {% endif %}
+    
+    <form method="post" action="/signingup">
+        <div class="mb-3 row">
+            <label for="username" class="form-label">Username:</label>
+            <input type="text" name="username" class="form-control" placeholder="johnny_scissors" required/>
+        </div>
+    
+        <div class="mb-3 row">
+            <label for="password" class="form-label">Password:</label>
+            <input type="password" name="password" class="form-control" required/>
+        </div>
+    
+        <div class="mb-3 row">
+            <label for="preferred_choice" class="form-label">Preferred Choice:</label>
+            <select name="preferred_choice" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example" required>
+                <option value="" selected>--</option>
+                <option value="rock">Rock</option>
+                <option value="paper">Paper</option>
+                <option value="scissors">Scissors</option>
+              </select>
+        </div>
+    
+        <input type="submit" value="Sign Up">
+    </form>
+{% endblock %}
