@@ -1,4 +1,4 @@
-import json
+import json, secret
 from pathlib import Path
 from typing import Dict, Optional, Self
 
@@ -20,11 +20,14 @@ class DataInstance(object):
     __host: str = "192.168.68.103"
     __port: int = 5000
 
+    __APP_SECRET_KEY = secret.flask_key
+
     def __new__(cls) -> Self:
         if not cls._instance:
             cls._instance = super(DataInstance, cls).__new__(cls)
         return cls._instance
     
+    def app_secret_key(cls) -> bytes: return cls.__APP_SECRET_KEY
     def src_dir_path(cls) -> Path: return cls.__SRC_DIR_PATH
     def project_dir_path(cls) -> Path: return cls.__PROJECT_DIR_PATH
     def resources_dir_path(cls) -> Path: return cls.__RESOURCES_DIR_PATH

@@ -19,7 +19,8 @@ def create_app() -> Flask:
         static_folder=DataInstance().static_dir_path(),
         template_folder=DataInstance().templates_dir_path()
     )
-    _app.secret_key = b'c00edd0f6c62a70d432eed87a0318c2dc905668a6902a0b4f3e6dcc281f8dd07'
+    _app.testing = True
+    _app.secret_key = DataInstance().app_secret_key()
 
     @_app.route("/status", methods=["GET"])
     def status(): return jsonify({"status": "healthy"})
