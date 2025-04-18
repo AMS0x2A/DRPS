@@ -3,7 +3,6 @@
         "username": "test",
         "password": "$2b$12$Czye2xKYz7iTUqpp2gSPxOadS1u/hwAMimlQzoE4zraGHrQtC57q.",
         "preferred_choice": "",
-        "total_games": 0,
         "total_wins": 0,
         "total_loses": 1,
         "total_draws": 0,
@@ -21,17 +20,17 @@
         "username": "test",
         "password": "$2b$12$Czye2xKYz7iTUqpp2gSPxOadS1u/hwAMimlQzoE4zraGHrQtC57q.",
         "preferred_choice": "paper",
-        "total_games": 0,
         "total_wins": 1,
         "total_loses": 0,
-        "total_draws": 0,
-        "queue": [
-            {
-                "opponent": "test1",
-                "opp_choice": "scissors"
-            }
-        ],
+        "total_draws": 1,
+        "queue": [],
         "games": [
+            {
+                "choice": "scissors",
+                "opponent": "test1",
+                "opp_choice": "scissors",
+                "result": "D"
+            },
             {
                 "choice": "paper",
                 "opponent": "RoboPlayer",
@@ -44,11 +43,17 @@
         "username": "test1",
         "password": "$2b$12$mLuTNuvuX0bNmK.khiDO0e4oFD7jPcMrWGQ74/eRdA2i.AwrJwNsG",
         "preferred_choice": "scissors",
-        "total_games": 0,
         "total_wins": 0,
         "total_loses": 0,
-        "total_draws": 0,
+        "total_draws": 1,
         "queue": [],
-        "games": []
+        "games": [
+            {
+                "choice": "scissors",
+                "opponent": "test",
+                "opp_choice": "scissors",
+                "result": "D"
+            }
+        ]
     }
 }

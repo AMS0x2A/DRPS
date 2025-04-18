@@ -66,7 +66,6 @@ def create_app() -> Flask:
                 "username": username,
                 "password": hashpw(request.form["password"].encode(), gensalt()).decode(),
                 "preferred_choice": request.form["preferred_choice"],
-                "total_games": 0,
                 "total_wins": 0,
                 "total_loses": 0,
                 "total_draws": 0,
@@ -162,9 +161,9 @@ def create_app() -> Flask:
                 outcome = determine_winner(user_choice, other_choice)
         else:
             for i, battle in enumerate(user_queue):
-                if battle["username"] == other_username.lower():
+                if battle["opponent"] == other_username.lower():
                     user_queue.pop(i)
-                    other_choice = battle["choice"]
+                    other_choice = battle["opp_choice"]
                     outcome = determine_winner(user_choice, other_choice)
 
             if not other_username.lower() in DataInstance().db().keys():
@@ -218,7 +217,7 @@ def create_app() -> Flask:
         username = session["username"]
         queue = DataInstance().db()[username.lower()]["queue"]
         history = DataInstance().db()[username.lower()]["games"]
-        return render_template("history.html", username=username, queue=queue, history=history)
+        return render_template("history.html", username=username, queue=queue, games=history)
     
     @_app.route("/session_clear", methods=["GET"])
     def session_clear():
