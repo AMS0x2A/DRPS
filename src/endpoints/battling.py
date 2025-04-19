@@ -85,7 +85,7 @@ class Battling(object):
                     outcome = determine_winner(user_choice, opp_choice)
 
             if outcome == -42:
-                DataInstance().db()[opp_username.lower()]["queue"].append({
+                DataInstance().get_user(opp_username)["queue"].append({
                     "opponent": username,
                     "opp_choice": user_choice
                 })

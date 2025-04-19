@@ -2,10 +2,10 @@ from bcrypt import checkpw
 from bson import ObjectId
 from dotenv import dotenv_values
 from pathlib import Path
-from pymongo.mongo_client import MongoClient
 from pymongo.collection import Collection
+from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi, ServerApiVersion
-from typing import Dict, Literal, Optional, OrderedDict, Self
+from typing import Literal, Optional, OrderedDict, Self
 
 
 class DataInstance(object):

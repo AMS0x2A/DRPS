@@ -13,6 +13,6 @@ class History(object):
     
     def endpoint(cls) -> str:
         username: str = session["username"]
-        queue = DataInstance().db()[username.lower()]["queue"]
-        history = DataInstance().db()[username.lower()]["games"]
+        queue = DataInstance().get_user(username)["queue"]
+        history = DataInstance().get_user(username)["games"]
         return render_template("history.html", username=username, queue=queue, games=history)
