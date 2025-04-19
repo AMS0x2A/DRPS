@@ -52,46 +52,48 @@ class Battling(object):
         username: str = session["username"]
         user_choice: Literal["rock", "paper", "scissors"] = request.form["choice"]
 
-        other_username: str = request.form["opponent"]
-        other_choice: Literal["rock", "paper", "scissors", ""] = ""
+        opp_username: str = request.form["opponent"]
+        opp_choice: Literal["rock", "paper", "scissors", ""] = ""
 
-        user_queue: List[Dict[str, str]] = DataInstance().db()[username.lower()]["queue"]
+        user_queue: List[Dict[str, str]] = DataInstance().get_user(username)["queue"]
         outcome: int = -42
         
-        if username.lower() == other_username.lower(): 
+        if username.lower() == opp_username.lower(): 
             session["error"] = "Cannot battle yourself"
             return redirect(url_for("battle"))
-        
-        if not DataInstance().user_exists(other_username):
-            session["error"] = "Opponent not found in system"
-            return redirect(url_for("battle"))
 
-        if len(other_username) == 0 and len(user_queue) == 0: 
-            other_username = "RoboPlayer"
-            if not DataInstance().user_exists(other_username): 
-                DataInstance().create_user(other_username, "none")
-            other_choice = choice(["rock", "paper", "scissor"])
-            outcome = determine_winner(user_choice, other_choice)
-        elif len(other_username) == 0 and len(user_queue) > 0:
+        if len(opp_username) == len(user_queue) == 0: 
+            opp_username = "RoboPlayer"
+            if not DataInstance().user_exists(opp_username): 
+                DataInstance().create_user(opp_username, "none", "rock")
+            opp_choice = choice(["rock", "paper", "scissor"])
+            outcome = determine_winner(user_choice, opp_choice)
+        elif len(opp_username) == 0 and len(user_queue) > 0:
             other = user_queue.pop(0)
-            other_username = other["opponent"]
-            other_choice = other["opp_choice"]
-            outcome = determine_winner(user_choice, other_choice)
+            opp_username = other["opponent"]
+            opp_choice = other["opp_choice"]
+            outcome = determine_winner(user_choice, opp_choice)
         else:
+            if not DataInstance().user_exists(opp_username):
+                session["error"] = "Opponent not found in system"
+                return redirect(url_for("battle"))
+            
             for i, battle in enumerate(user_queue):
-                if battle["opponent"] == other_username.lower():
+                if battle["opponent"] == opp_username.lower():
                     user_queue.pop(i)
-                    other_choice = battle["opp_choice"]
-                    outcome = determine_winner(user_choice, other_choice)
+                    opp_choice = battle["opp_choice"]
+                    outcome = determine_winner(user_choice, opp_choice)
 
             if outcome == -42:
-                DataInstance().db()[other_username.lower()]["queue"].append({
+                DataInstance().db()[opp_username.lower()]["queue"].append({
                     "opponent": username,
                     "opp_choice": user_choice
                 })
-                DataInstance().commit_db()
 
-                session["outcome"] = f"You challenged {other_username} to battle"
+                session["outcome"] = f"You challenged {opp_username} to battle"
                 return redirect(url_for("battle"))
-            
+
+        post_outcome(
+            username, user_choice, opp_username, opp_choice, outcome
+        )
         return redirect(url_for("battle"))

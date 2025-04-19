@@ -3,10 +3,13 @@ from data_instance import DataInstance
 
 
 def main(host: str="0.0.0.0", port: int=5000, debug: bool=False):
-    DataInstance().host = host
-    DataInstance().port = port
-    
-    create_app().run(host, port, debug)
+    try:
+        DataInstance().host = host
+        DataInstance().port = port
+        
+        create_app().run(host, port, debug)
+    except KeyboardInterrupt:
+        DataInstance().db().close()
 
 
 if __name__ == "__main__":

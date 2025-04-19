@@ -1,8 +1,12 @@
-import json
 from bcrypt import checkpw
+from bson import ObjectId
+from dotenv import dotenv_values
 from pathlib import Path
-from secrets import token_hex
-from typing import Dict, Literal, Optional, Self
+from pymongo.mongo_client import MongoClient
+from pymongo.collection import Collection
+from pymongo.server_api import ServerApi, ServerApiVersion
+from typing import Dict, Literal, Optional, OrderedDict, Self
+
 
 class DataInstance(object):
     _instance: Optional[Self] = None
@@ -15,19 +19,27 @@ class DataInstance(object):
     __CSS_DIR_PATH: Path = Path(__STATIC_DIR_PATH, "css")
     __IMAGES_DIR_PATH: Path = Path(__STATIC_DIR_PATH, "images")
     __JSONS_DIR_PATH: Path = Path(__STATIC_DIR_PATH, "jsons")
-    __DB_PATH: Path = Path(__JSONS_DIR_PATH, "db.json")
 
-    __DB: Dict[str, Dict[str, str | int]] = json.load(open(__DB_PATH, "r"))
-
-    __host: str = "localhost"
     __port: int = 5000
 
-    __APP_SECRET_KEY: bytes = token_hex().encode()
+    __CONFIG: OrderedDict = dotenv_values()
+    __host: str = __CONFIG["HOST"]
+    __APP_SECRET_KEY: bytes = __CONFIG["SECRET_KEY"].encode()
+    __MONGO_CLIENT = MongoClient(
+        __CONFIG["MONGO_URI"],
+        server_api=ServerApi(ServerApiVersion.V1)
+    )
+    __USERNAMES_ID = __CONFIG["USERNAMES_ID"]
 
-    __SECRET_PY_PATH: Path = Path(__SRC_DIR_PATH, "secret.py")
-    __SECRET_PY_PATH.touch()
-    with open(__SECRET_PY_PATH, "w") as fh:
-        fh.write(f"flask_secret = {__APP_SECRET_KEY}")
+    __DB: Optional[Collection] = None
+    try:
+        __DB = __MONGO_CLIENT.get_database(
+            __CONFIG["DATABASE_NAME"]
+        ).get_collection("Accounts")
+    except Exception as e:
+        raise Exception("Cannot initialize MongoDB", e)
+    
+    del __CONFIG
 
     def __new__(cls) -> Self:
         if not cls._instance:
@@ -43,16 +55,13 @@ class DataInstance(object):
     def css_dir_path(cls) -> Path: return cls.__CSS_DIR_PATH
     def images_dir_path(cls) -> Path: return cls.__IMAGES_DIR_PATH
     def jsons_dir_path(cls) -> Path: return cls.__JSONS_DIR_PATH
-    def db_path(cls) -> Path: return cls.__DB_PATH
 
-    def db(cls) -> Dict[str, Dict[str, str | int]]: return cls.__DB
-    def commit_db(cls):
-        with open(cls.__DB_PATH, "w") as fh:
-            json.dump(cls.__DB, fh, indent=4)
+    def db(cls) -> Collection: return cls.__DB
 
     def create_user(cls, username: str, hashed_password: str, preferred_choice: Literal["rock", "paper", "scissors"]) -> bool:
-        if username.lower() in cls.db().keys(): return False
-        cls.db()[username.lower()] = {
+        if cls.user_exists(username): return False
+        
+        cls.db().insert_one({
             "username": username,
             "password": hashed_password,
             "preferred_choice": preferred_choice,
@@ -61,32 +70,46 @@ class DataInstance(object):
             "total_draws": 0,
             "queue": [],
             "games": []
-        } 
-        cls.commit_db()
+        })
+
+        usernames = cls.db().find_one({"_id": ObjectId(cls.__USERNAMES_ID)})["usernames"]
+        usernames.append(username.lower())
+        cls.db().update_one({"_id": ObjectId(cls.__USERNAMES_ID)}, {"usernames": usernames})
         return True
     
     def user_exists(cls, username: str) -> bool:
-        return username.lower() in cls.db().keys()
+        return username.lower() in cls.db().find_one({"_id": ObjectId(cls.__USERNAMES_ID)})["usernames"]
     
     def user_lost(cls, username: str, user_choice: Literal["rock", "paper", "scissors"], 
                   opp_username: str, opp_choice: Literal["rock", "paper", "scissors"]):
-        cls.db()[username.lower()]["total_loses"] += 1
+        user = cls.db().find_one({"username": username})
+        if not user: return
+        user["total_loses"] += 1
+        cls.db().update_one({"_id": user["_id"]}, {"$set": user})
         cls.__user_played(username, user_choice, opp_username, opp_choice, -1)
     
     def user_won(cls, username: str, user_choice: Literal["rock", "paper", "scissors"], 
                   opp_username: str, opp_choice: Literal["rock", "paper", "scissors"]):
-        cls.db()[username.lower()]["total_wins"] += 1
+        user = cls.db().find_one({"username": username})
+        if not user: return
+        user["total_wins"] += 1
+        cls.db().update_one({"_id": user["_id"]}, {"$set": user})
         cls.__user_played(username, user_choice, opp_username, opp_choice, 1)
     
     def user_drew(cls, username: str, user_choice: Literal["rock", "paper", "scissors"], 
                   opp_username: str, opp_choice: Literal["rock", "paper", "scissors"]):
-        cls.db()[username.lower()]["total_draws "] += 1
+        user = cls.db().find_one({"username": username})
+        if not user: return
+        user["total_draws"] += 1
+        cls.db().update_one({"_id": user["_id"]}, {"$set": user})
         cls.__user_played(username, user_choice, opp_username, opp_choice, 0)
     
     def __user_played(cls, username: str, user_choice: Literal["rock", "paper", "scissors"], 
                   opp_username: str, opp_choice: Literal["rock", "paper", "scissors"],
                   outcome: Literal[-1, 0, 1]):
-        DataInstance().db()[username.lower()]["games"].insert(
+        user = cls.db().find_one({"username": username})
+        if not user: return
+        user["games"].insert(
             0, {
                 "choice": user_choice,
                 "opponent": opp_username,
@@ -94,13 +117,19 @@ class DataInstance(object):
                 "result": "W" if outcome == 1 else "L" if outcome == -1 else "D"
             }
         )
-        DataInstance().commit_db()
+        result = cls.db().update_one({"_id": user["_id"]}, {"$set": user})
+        print(result.modified_count)
 
     def check_password(cls, username: str, password: str) -> bool:
+        user = cls.db().find_one({"username": username})
+        if not user: return False
         return checkpw(
             password.encode(), 
-            cls.db()[username.lower()]["password"].encode()
+            user["password"].encode()
         )
+    
+    def get_user(cls, username: str):
+        return cls.db().find_one({"username": username})
 
     @property
     def host(cls) -> str:

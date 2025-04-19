@@ -11,14 +11,27 @@
     <form method="post" action="/loggingin">
         <div class="mb-3 row">
             <label for="username" class="form-label">Username:</label>
-            <input type="text" name="username" class="form-control" placeholder="johnny_scissors" value="{{ username }}" required/>
+            {% if username %}
+                <input type="text" name="username" class="form-control" placeholder="johnny_scissors" value="{{ username }}" disabled/>
+            {% else %}
+                <input type="text" name="username" class="form-control" placeholder="johnny_scissors" value="{{ username }}" required/>
+            {% endif %}
         </div>
     
         <div class="mb-3 row">
             <label for="password" class="form-label">Password:</label>
-            <input type="password" name="password" class="form-control" required/>
+            {% if username %}
+                <input type="password" name="password" class="form-control" disabled/>
+            {% else %}
+                <input type="password" name="password" class="form-control" required/>
+            {% endif %}
         </div>
     
-        <input type="submit" value="Log In">
+        {% if username %}
+            <input type="submit" value="Log In" disabled>
+        {% else %}
+            <input type="submit" value="Log In">
+        {% endif %}
+        
     </form>
 {% endblock %}

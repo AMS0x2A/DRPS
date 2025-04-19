@@ -11,22 +11,39 @@
     <form method="post" action="/signingup">
         <div class="mb-3 row">
             <label for="username" class="form-label">Username:</label>
-            <input type="text" name="username" class="form-control" placeholder="johnny_scissors" required/>
+            {% if username %}
+                <input type="text" name="username" class="form-control" placeholder="johnny_scissors" disabled/>
+            {% else %}
+                <input type="text" name="username" class="form-control" placeholder="johnny_scissors" required/>
+            {% endif %}
         </div>
     
         <div class="mb-3 row">
             <label for="password" class="form-label">Password:</label>
-            <input type="password" name="password" class="form-control" required/>
+            {% if username %}
+                <input type="password" name="password" class="form-control" disabled/>
+            {% else %}
+                <input type="password" name="password" class="form-control" required/>
+            {% endif %}
         </div>
     
         <div class="mb-3 row">
             <label for="preferred_choice" class="form-label">Preferred Choice:</label>
-            <select name="preferred_choice" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example" required>
-                <option value="" selected>--</option>
-                <option value="rock">Rock</option>
-                <option value="paper">Paper</option>
-                <option value="scissors">Scissors</option>
-              </select>
+            {% if username %}
+                <select name="preferred_choice" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example" disabled>
+                    <option value="" selected>--</option>
+                    <option value="rock">Rock</option>
+                    <option value="paper">Paper</option>
+                    <option value="scissors">Scissors</option>
+                </select>
+            {% else %}
+                <select name="preferred_choice" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example" required>
+                    <option value="" selected>--</option>
+                    <option value="rock">Rock</option>
+                    <option value="paper">Paper</option>
+                    <option value="scissors">Scissors</option>
+                </select>
+            {% endif %}
         </div>
     
         <input type="submit" value="Sign Up">
