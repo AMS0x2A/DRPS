@@ -11,10 +11,9 @@ class Login(object):
         return cls._instance
     
     def endpoint(cls) -> str:
-        username: str = ""
+        username: str = session["username"]
         error: str = ""
-        if "username" in session.keys():
-            username = session["username"]
+        
         if "error" in session.keys():
             error = session.pop("error")
         return render_template("login.html", username=username, error=error)

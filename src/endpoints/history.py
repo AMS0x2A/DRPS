@@ -12,9 +12,7 @@ class History(object):
         return cls._instance
     
     def endpoint(cls) -> str:
-        username: str = ""
-        if not "username" in session.keys(): return redirect(url_for("login"))
-        username = session["username"]
+        username: str = session["username"]
         queue = DataInstance().db()[username.lower()]["queue"]
         history = DataInstance().db()[username.lower()]["games"]
         return render_template("history.html", username=username, queue=queue, games=history)

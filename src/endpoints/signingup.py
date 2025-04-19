@@ -16,22 +16,18 @@ class SigningUp(object):
         if request.method == "GET": return redirect(url_for("signup"))
 
         username = request.form["username"]
-        username_taken: bool = username.lower() in DataInstance().db().keys()
-        if not username_taken:
-            DataInstance().db()[username.lower()] = {
-                "username": username,
-                "password": hashpw(request.form["password"].encode(), gensalt()).decode(),
-                "preferred_choice": request.form["preferred_choice"],
-                "total_wins": 0,
-                "total_loses": 0,
-                "total_draws": 0,
-                "queue": [],
-                "games": []
-            }
-            DataInstance().commit_db()
-        
+        username_taken: bool = DataInstance().user_exists(username)
+
         if username_taken:
             session["error"] = "Username Taken"
             return redirect(url_for("signup"))
+        
+        if not username_taken:
+            DataInstance().create_user(
+                username, 
+                hashpw(request.form["password"].encode(), gensalt()).decode(),
+                request.form["preferred_choice"]
+            )
+        
         session["username"] = username
         return redirect(url_for("login"))

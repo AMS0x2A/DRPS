@@ -1,4 +1,3 @@
-from bcrypt import checkpw
 from data_instance import DataInstance
 from flask import request, redirect, session, url_for
 from typing import Optional, Self
@@ -13,20 +12,13 @@ class LoggingIn(object):
         return cls._instance
     
     def endpoint(cls) -> str:
-        if request.method == "GET": 
-            return redirect(url_for("login"))
+        if request.method == "GET": return redirect(url_for("login"))
         username: str = request.form["username"]
         password: str = request.form["password"]
 
-        session["username"] = username
-        if (
-            not username.lower() in DataInstance().db().keys()
-        ) or (
-            not checkpw(
-                password.encode(), 
-                DataInstance().db()[username.lower()]["password"].encode()
-            )
-        ):
+        if not DataInstance().user_exists(username) or not DataInstance().check_password(username, password):
             session["error"] = "Username/Password Incorrect"
             return redirect(url_for("login"))
+        
+        session["username"] = username
         return redirect(url_for("index"))

@@ -9,7 +9,8 @@ from endpoints.battling import Battling
 from endpoints.history import History
 
 from data_instance import DataInstance
-from flask import Flask, jsonify
+from endpoint_wrappers import login_required
+from flask import Flask, jsonify, session
 from werkzeug.middleware.proxy_fix import ProxyFix
 
 
@@ -19,8 +20,12 @@ def create_app() -> Flask:
         static_folder=DataInstance().static_dir_path(),
         template_folder=DataInstance().templates_dir_path()
     )
-    _app.testing = True
     _app.secret_key = DataInstance().app_secret_key()
+
+    @_app.before_request
+    def check_login():
+        if "username" not in session.keys():
+            session["username"] = ""
 
     @_app.route("/status", methods=["GET"])
     def status(): return jsonify({"status": "healthy"})
@@ -44,12 +49,15 @@ def create_app() -> Flask:
     def logout(): return Logout().endpoint()
     
     @_app.route("/battle", methods=["GET"])
+    @login_required
     def battle(): return Battle().endpoint()
     
     @_app.route("/battling", methods=["GET", "POST"])
+    @login_required
     def battling(): return Battling().endpoint()
     
     @_app.route("/history", methods=["GET"])
+    @login_required
     def history(): return History().endpoint()
 
     _app.wsgi_app = ProxyFix(_app.wsgi_app)

@@ -11,11 +11,9 @@ class Battle(object):
         return cls._instance
     
     def endpoint(cls) -> str:
-        username: str = ""
+        username: str = session["username"]
         outcome: str = ""
         error: str = ""
-        if not "username" in session.keys(): return redirect(url_for("login"))
-        username = session["username"]
 
         if "outcome" in session.keys():
             outcome = session.pop("outcome")

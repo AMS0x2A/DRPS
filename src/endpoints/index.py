@@ -11,8 +11,5 @@ class Index(object):
         return cls._instance
     
     def endpoint(cls) -> str:
-        # print(request.host_url)
-        username: str = ""
-        if "username" in session.keys():
-            username = session["username"]
+        username: str = session["username"]
         return render_template("index.html", username=username)
