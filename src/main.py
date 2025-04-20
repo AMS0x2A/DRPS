@@ -1,5 +1,5 @@
 from src.app import create_app 
-from src.data_instance import DataInstance
+from data_instance import DataInstance
 
 
 def main(host: str="0.0.0.0", port: int=8000, debug: bool=False):
