@@ -1,4 +1,4 @@
-from data_instance import DataInstance
+from src.data_instance import DataInstance
 from flask import request, redirect, session, url_for
 from typing import Optional, Self
 

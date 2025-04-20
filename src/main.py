@@ -1,8 +1,8 @@
-from app import create_app 
-from data_instance import DataInstance
+from src.app import create_app 
+from src.data_instance import DataInstance
 
 
-def main(host: str="0.0.0.0", port: int=5000, debug: bool=False):
+def main(host: str="0.0.0.0", port: int=8000, debug: bool=False):
     try:
         DataInstance().host = host
         DataInstance().port = port
@@ -25,8 +25,8 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "-p", "--port", type=int, 
-        help="The port on which to run the webserver/api. Defaults to 5000.",
-        default=5000
+        help="The port on which to run the webserver/api. Defaults to 8000.",
+        default=8000
     )
 
     args: Namespace = parser.parse_args()

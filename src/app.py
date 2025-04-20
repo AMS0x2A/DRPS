@@ -1,15 +1,15 @@
-from endpoints.index import Index
-from endpoints.signup import Signup
-from endpoints.signingup import SigningUp
-from endpoints.login import Login
-from endpoints.loggingin import LoggingIn
-from endpoints.logout import Logout
-from endpoints.battle import Battle
-from endpoints.battling import Battling
-from endpoints.history import History
+from src.endpoints.index import Index
+from src.endpoints.signup import Signup
+from src.endpoints.signingup import SigningUp
+from src.endpoints.login import Login
+from src.endpoints.loggingin import LoggingIn
+from src.endpoints.logout import Logout
+from src.endpoints.battle import Battle
+from src.endpoints.battling import Battling
+from src.endpoints.history import History
 
-from data_instance import DataInstance
-from endpoint_wrappers import login_required
+from src.data_instance import DataInstance
+from src.endpoint_wrappers import login_required
 from flask import Flask, jsonify, session
 from werkzeug.middleware.proxy_fix import ProxyFix
 

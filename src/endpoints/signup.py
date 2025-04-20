@@ -1,4 +1,4 @@
-from flask import request, render_template, session
+from flask import render_template, session
 from typing import Optional, Self
 
 
