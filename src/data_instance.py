@@ -72,9 +72,9 @@ class DataInstance(object):
             "games": []
         })
 
-        usernames = cls.db().find_one({"_id": ObjectId(cls.__USERNAMES_ID)})["usernames"]
-        usernames.append(username.lower())
-        cls.db().update_one({"_id": ObjectId(cls.__USERNAMES_ID)}, {"usernames": usernames})
+        usernames = cls.db().find_one({"_id": ObjectId(cls.__USERNAMES_ID)})
+        usernames["usernames"].append(username.lower())
+        cls.db().update_one({"_id": ObjectId(cls.__USERNAMES_ID)}, {"$set": usernames})
         return True
     
     def user_exists(cls, username: str) -> bool:

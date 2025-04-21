@@ -30,4 +30,4 @@ class SigningUp(object):
             )
         
         session["username"] = username
-        return redirect(url_for("login"))
+        return redirect(url_for("battle"))
