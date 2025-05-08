@@ -1,6 +1,5 @@
 debug:
-	@echo "This doesn't work unless internal imports are relative"
-	@python3 src/main.py -d -p 8080 
+	@python3 -m src.main -d -p 8080 
 
 drps:
 	@gunicorn -w 4 -b 0.0.0.0 'src.app:create_app()'
