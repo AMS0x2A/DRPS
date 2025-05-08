@@ -16,8 +16,8 @@ if __name__ == "__main__":
     from argparse import ArgumentParser, Namespace
 
     parser: ArgumentParser = ArgumentParser(
-        prog="Better Betting API and Website",
-        description="A website/api for betting predictions"
+        prog="DRPS Website",
+        description="A website for rock, paper, scissors"
     )
     parser.add_argument(
         "-d", "--debug", help="Debug flag.",
@@ -25,7 +25,7 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "-p", "--port", type=int, 
-        help="The port on which to run the webserver/api. Defaults to 8000.",
+        help="The port on which to run the webserver. Defaults to 8000.",
         default=8000
     )
 
