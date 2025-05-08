@@ -20,7 +20,7 @@ class DataInstance(object):
     __IMAGES_DIR_PATH: Path = Path(__STATIC_DIR_PATH, "images")
     __JSONS_DIR_PATH: Path = Path(__STATIC_DIR_PATH, "jsons")
 
-    __port: int = 5000
+    __port: int = 14642
 
     __CONFIG: OrderedDict = dotenv_values()
     __host: str = __CONFIG["HOST"]
