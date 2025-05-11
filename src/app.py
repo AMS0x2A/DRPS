@@ -60,5 +60,5 @@ def create_app() -> Flask:
     @login_required
     def history(): return History().endpoint()
 
-    _app.wsgi_app = ProxyFix(_app.wsgi_app)
+    _app.wsgi_app = ProxyFix(_app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
     return _app
