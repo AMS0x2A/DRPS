@@ -29,8 +29,9 @@ The application is most easily run by utilizing the project's Makefile. There ar
 
 |Command | Result |
 |--|--|
-| `make drps` | Run the application through Gunicorn on port 8000 |
-| `make docker` | Build and run the application in a Docker container (container port 5000; host port 8000) |
+| `make debug` | Run the application through flask debug on port 14642 |
+| `make run` | Run the application through Gunicorn on port 14642 |
+| `make docker` | Build and run the application in a Docker container (container port 14642; host port 14642) |
 
 ### Access
 Access the application by visiting the address in a web browser.
