@@ -22,7 +22,7 @@
         </div>
     {% endif %}
     
-    <form method="post" action="/battling">
+    <form method="post" action="{{ url_for('battling') }}">
         <div class="mb-3 row">
             <label for="opponent" class="form-label">Opponent Username:</label>
             <input type="text" name="opponent" class="form-control" placeholder="johnny_scissors" />

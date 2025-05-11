@@ -8,7 +8,7 @@
         </div>
     {% endif %}
     
-    <form id="signup-form" method="post" action="/signingup">
+    <form id="signup-form" method="post" action="{{ url_for('signingup') }}">
         <div class="mb-3 row">
             <label for="username" class="form-label">Username:</label>
             {% if username %}
